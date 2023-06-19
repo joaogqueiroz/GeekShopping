@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/GeekShoppping.ProductAPI/bin/Debug/net6.0/GeekShoppping.ProductAPI.dll",
+            "program": "${workspaceFolder}/GeekShopping.ProductAPI/bin/Debug/net6.0/GeekShopping.ProductAPI.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/GeekShoppping.ProductAPI",
+            "cwd": "${workspaceFolder}/GeekShopping.ProductAPI",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
