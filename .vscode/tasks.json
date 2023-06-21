@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/GeekShoppping.ProductAPI/GeekShoppping.ProductAPI.csproj",
+                "${workspaceFolder}/GeekShopping.ProductAPI/GeekShopping.ProductAPI.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/GeekShoppping.ProductAPI/GeekShoppping.ProductAPI.csproj",
+                "${workspaceFolder}/GeekShopping.ProductAPI/GeekShopping.ProductAPI.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/GeekShoppping.ProductAPI/GeekShoppping.ProductAPI.csproj"
+                "${workspaceFolder}/GeekShopping.ProductAPI/GeekShopping.ProductAPI.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
