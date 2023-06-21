@@ -14,12 +14,9 @@ namespace GeekShopping.Web.Controllers
         {
             _productService = productService;
         }
-
-        [Authorize]
         public async Task<IActionResult> ProductIndex()
         {
-            var accessToken = await HttpContext.GetTokenAsync("access_token");
-            var products = await _productService.FindAllProducts(accessToken);
+            var products = await _productService.FindAllProducts("");
             return View(products);
         }
 
@@ -27,6 +24,7 @@ namespace GeekShopping.Web.Controllers
         {
             return View();
         }
+
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> ProductCreate(ProductModel model)
@@ -54,10 +52,12 @@ namespace GeekShopping.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> ProductUpdate(ProductModel model)
         {
-            var accessToken = await HttpContext.GetTokenAsync("access_token");
-            var response = await _productService.UpdateProduct(model, accessToken);
-            if (response != null) return RedirectToAction(nameof(ProductIndex));
-
+            if (ModelState.IsValid)
+            {
+                var accessToken = await HttpContext.GetTokenAsync("access_token");
+                var response = await _productService.UpdateProduct(model, accessToken);
+                if (response != null) return RedirectToAction(nameof(ProductIndex));
+            }
             return View(model);
         }
 

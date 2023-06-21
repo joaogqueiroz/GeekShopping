@@ -1,3 +1,4 @@
+using System.Globalization;
 using GeekShopping.Web.Services;
 using GeekShopping.Web.Services.IServices;
 using Microsoft.AspNetCore.Authentication;
@@ -27,12 +28,18 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters.NameClaimType = "name";
     options.TokenValidationParameters.RoleClaimType = "role";
     options.Scope.Add("geek_shopping");
-    options.Scope.Add("geek_shopping");
     options.SaveTokens = true;
-  }
+  });
 
-  );
+var cultureInfo = new CultureInfo("pt-BR");
 
+cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
+
+cultureInfo.NumberFormat.CurrencyDecimalSeparator = ".";
+
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 var app = builder.Build();
 

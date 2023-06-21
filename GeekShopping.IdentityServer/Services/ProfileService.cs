@@ -37,6 +37,7 @@ namespace GeekShopping.IdentityServer.Services
 
             if (_userManager.SupportsUserRole)
             {
+                Console.WriteLine("Entrou no SupportsUserRole");
                 IList<string> roles = await _userManager.GetRolesAsync(user);
                 foreach (var role in roles)
                 {
@@ -52,7 +53,6 @@ namespace GeekShopping.IdentityServer.Services
                 }
             }
             context.IssuedClaims = claims;
-            throw new NotImplementedException();
         }
 
         public async Task IsActiveAsync(IsActiveContext context)

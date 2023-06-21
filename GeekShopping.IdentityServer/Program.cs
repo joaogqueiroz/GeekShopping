@@ -16,10 +16,6 @@ var connectionString = builder.Configuration.GetConnectionString("GeekShoppingId
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<SqlServerContext>()
                 .AddDefaultTokenProviders();
-
-builder.Services.AddScoped<IDbInitializer, DbInitializer>();
-builder.Services.AddScoped<IProfileService, ProfileService>();
-
 var builderServices = builder.Services.AddIdentityServer(options =>
     {
         options.Events.RaiseErrorEvents = true;
@@ -32,6 +28,10 @@ var builderServices = builder.Services.AddIdentityServer(options =>
         .AddInMemoryApiScopes(IdentityConfiguration.ApiScopes)
         .AddInMemoryClients(IdentityConfiguration.Clients)
         .AddAspNetIdentity<ApplicationUser>();
+
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
+
 
 builderServices.AddDeveloperSigningCredential();
 
