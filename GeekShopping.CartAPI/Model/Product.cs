@@ -5,8 +5,12 @@ using GeekShopping.CartAPI.Model.Base;
 namespace GeekShopping.CartAPI.Model
 {
     [Table("product")]
-    public class Product : BaseEntity
+    public class Product
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Column("id")]
+        public long Id { get; set; }
+
         [Required]
         [Column("name")]
         [StringLength(150)]
@@ -14,7 +18,7 @@ namespace GeekShopping.CartAPI.Model
 
         [Required]
         [Column("price")]
-        [Range(1,999999999999)]
+        [Range(1, 999999999999)]
         public decimal Price { get; set; }
 
         [Column("description")]
