@@ -3,6 +3,7 @@
 using AutoMapper;
 using GeekShopping.CartAPI.Config;
 using GeekShopping.CartAPI.Model.Context;
+using GeekShopping.CartAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -14,10 +15,11 @@ var connectionString = builder.Configuration.GetConnectionString("GeekShoppingCa
 
 
 builder.Services.AddDbContext<SqlServerContext>(options => options.UseSqlServer(connectionString));
+
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-//builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddControllers();
 
 builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer" ,options =>
