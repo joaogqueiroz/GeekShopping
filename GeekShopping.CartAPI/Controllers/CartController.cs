@@ -12,7 +12,8 @@ public class CartController : ControllerBase
     private ICartRepository _repository;
     public CartController(ICartRepository repository)
     {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _repository = repository ?? throw new
+         ArgumentNullException(nameof(repository));
     }
 
 
@@ -41,7 +42,7 @@ public class CartController : ControllerBase
     }
 
     [HttpDelete("remove-cart/{id}")]
-    public async Task<ActionResult<CartVO>> RemoveCart(long id)
+    public async Task<ActionResult<CartVO>> RemoveCart(int id)
     {
         var status = await _repository.RemoveFromCart(id);
         if (!status) return BadRequest();

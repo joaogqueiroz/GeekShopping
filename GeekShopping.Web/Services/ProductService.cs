@@ -13,27 +13,27 @@ namespace GeekShopping.Web.Services
         {
             _client = client ?? throw new ArgumentNullException(nameof(HttpClient));
         }
-        public async Task<IEnumerable<ProductModel>> FindAllProducts(string token)
+        public async Task<IEnumerable<ProductViewModel>> FindAllProducts(string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _client.GetAsync(BasePath);
-            return await response.Content.ReadFromJsonAsync<List<ProductModel>>();
+            return await response.Content.ReadFromJsonAsync<List<ProductViewModel>>();
         }
 
-        public async Task<ProductModel> FindProductById(long id, string token)
+        public async Task<ProductViewModel> FindProductById(long id, string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _client.GetAsync($"{BasePath}/{id}");
-            return await response.Content.ReadFromJsonAsync<ProductModel>();
+            return await response.Content.ReadFromJsonAsync<ProductViewModel>();
         }
 
-        public async Task<ProductModel> CreateProduct(ProductModel model, string token)
+        public async Task<ProductViewModel> CreateProduct(ProductViewModel model, string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _client.PostAsJsonAsync(BasePath, model);
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<ProductModel>();
+                return await response.Content.ReadFromJsonAsync<ProductViewModel>();
             }
             else
             {
@@ -41,13 +41,13 @@ namespace GeekShopping.Web.Services
             }
         }
 
-        public async Task<ProductModel> UpdateProduct(ProductModel model, string token)
+        public async Task<ProductViewModel> UpdateProduct(ProductViewModel model, string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _client.PutAsJsonAsync(BasePath, model);
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<ProductModel>();
+                return await response.Content.ReadFromJsonAsync<ProductViewModel>();
             }
             else
             {

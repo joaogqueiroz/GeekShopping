@@ -1,5 +1,3 @@
-
-
 using AutoMapper;
 using GeekShopping.CartAPI.Config;
 using GeekShopping.CartAPI.Model.Context;
@@ -19,16 +17,18 @@ builder.Services.AddDbContext<SqlServerContext>(options => options.UseSqlServer(
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddScoped<ICartRepository, CartRepository>();
+
 builder.Services.AddControllers();
 
-builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer" ,options =>
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
 {
     options.Authority = builder.Configuration["ServiceUrls:IdentityServer"];
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateAudience = false
-
     };
 });
 
@@ -42,10 +42,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen(c =>
 {
 
@@ -59,6 +56,7 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
+
     c.AddSecurityRequirement(new OpenApiSecurityRequirement {
     {
         new OpenApiSecurityScheme
@@ -87,7 +85,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();
 
 app.UseAuthentication();
 

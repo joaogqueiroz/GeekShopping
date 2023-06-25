@@ -16,8 +16,8 @@ namespace GeekShopping.CartAPI.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    user_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    cupon_code = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    user_id = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    cupon_code = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -47,8 +47,8 @@ namespace GeekShopping.CartAPI.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CartHeaderId = table.Column<long>(type: "bigint", nullable: false),
-                    ProductId = table.Column<long>(type: "bigint", nullable: false),
-                    count = table.Column<int>(type: "int", nullable: false)
+                    ProductId = table.Column<long>(type: "bigint", nullable: true),
+                    count = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -63,8 +63,7 @@ namespace GeekShopping.CartAPI.Migrations
                         name: "FK_cart_detail_product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "product",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateIndex(

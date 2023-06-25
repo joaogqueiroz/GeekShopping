@@ -14,12 +14,12 @@ namespace GeekShopping.CartAPI.Model
         [Required]
         [Column("name")]
         [StringLength(150)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Required]
         [Column("price")]
         [Range(1, 999999999999)]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         [Column("description")]
         [StringLength(500)]
