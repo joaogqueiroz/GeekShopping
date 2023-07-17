@@ -25,11 +25,10 @@ namespace GeekShopping.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var accessToken = await HttpContext.GetTokenAsync("");
             var products = await _productService.FindAllProducts("");
             return View(products);
-            //return View();
         }
+
         [Authorize]
         public async Task<IActionResult> Details(int id)
         {
@@ -38,6 +37,7 @@ namespace GeekShopping.Web.Controllers
             return View(products);
             //return View();
         }
+        
         [HttpPost]
         [ActionName("Details")]
         [Authorize]
