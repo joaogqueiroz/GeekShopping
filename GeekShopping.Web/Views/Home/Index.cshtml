@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GeekShopping.Web.Models.ProductModel>
+﻿@model IEnumerable<GeekShopping.Web.Models.ProductViewModel>
 
 <form>
     <div class="container row">
@@ -12,7 +12,7 @@
                         }
                         else
                         {
-                            <img style="width: 388px; height: 221.71px;" src="\images\product-placeholder.png" class="card-img-top">
+                            <img src="\images\product-placeholder.png" class="card-img-top">
                         }
                         <div class="card-body">
                             <h3 class="card-title">@product.SubStringName()</h3>
