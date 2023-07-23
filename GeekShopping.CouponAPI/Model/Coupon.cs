@@ -10,7 +10,7 @@ namespace GeekShopping.CouponAPI.Model
         [Required]
         [Column("coupon_conde")]
         [StringLength(30)]
-        public string? CouponConde { get; set; }
+        public string? CouponCode { get; set; }
 
         [Required]
         [Column("discount_amount")]

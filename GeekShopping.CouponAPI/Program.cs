@@ -4,6 +4,7 @@ using GeekShopping.CouponAPI.Model.Context;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using GeekShopping.CouponAPI.Config;
+using GeekShopping.CouponAPI.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,7 @@ var connectionString = builder.Configuration.GetConnectionString("GeekShoppingCo
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-// builder.Services.AddScoped<ICouponRepository, CouponRepository>();
+builder.Services.AddScoped<ICouponRepository, CouponRepository>();
 
 builder.Services.AddControllers();
 

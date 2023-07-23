@@ -4,6 +4,7 @@ using GeekShopping.CouponAPI.Model.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GeekShopping.CouponAPI.Migrations
 {
     [DbContext(typeof(SqlServerContext))]
-    partial class SqlServerContextModelSnapshot : ModelSnapshot
+    [Migration("20230719010941_adjustCouponCodeName")]
+    partial class adjustCouponCodeName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,20 +48,6 @@ namespace GeekShopping.CouponAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("coupon");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            CouponCode = "GEEK_2023_10",
-                            DiscountAmount = 10m
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            CouponCode = "GEEK_2023_15",
-                            DiscountAmount = 15m
-                        });
                 });
 #pragma warning restore 612, 618
         }
