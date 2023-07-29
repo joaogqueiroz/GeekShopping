@@ -2,9 +2,11 @@ version: '3.8'
 
 volumes:
   geekShoppingDB:
+  rabbitmqData:
 
 networks:
   geekShoppingNET:
+  rabbitmqNET:
 
 services:
 
@@ -21,3 +23,15 @@ services:
       ACCEPT_EULA: Y
       MSSQL_SA_PASSWORD: numsey#2021
       MSSQL_PID: EXPRESS
+
+  rabbitmq:
+        container_name: rabbitmq
+        ports:
+            - '5672:5672'
+            - '15672:15672'
+        image: 'rabbitmq:3.12-management'
+        volumes:
+            - rabbitmqData:/var/lib/rabbitmq/
+            - rabbitmqData:/var/log/rabbitmq
+        networks:
+            - rabbitmqNET
