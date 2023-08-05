@@ -35,8 +35,8 @@ namespace GeekShopping.OrderAPI.Model
         [Column("expiry_month_year")]
         public string? ExpiryMonthYear { get; set; }
         [Column("order_total_itens")]
-        public int OrderTotal { get; set; }
-        public IEnumerable<OrderDetail>? OrderDetails { get; set; }
+        public int? OrderTotal { get; set; }  = 0;
+        public List<OrderDetail>? OrderDetails { get; set; }
         [Column("payment_status")]
         public bool PaymentStatus {get; set;}
     }

@@ -1,19 +1,20 @@
 using System.Text;
 using System.Text.Json;
 using GeekShopping.OrderAPI.Messages;
+using GeekShopping.OrderAPI.Model;
 using GeekShopping.OrderAPI.Repository;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
 namespace GeekShopping.OrderAPI.MessageConsumer
 {
-    public class RabbitMQMessageConsumer : BackgroundService
+    public class RabbitMQCheckoutConsumer : BackgroundService
     {
         private readonly OrderRepository _repository;
         private IConnection _connection;
         private IModel _channel;
 
-        public RabbitMQMessageConsumer(OrderRepository repository)
+        public RabbitMQCheckoutConsumer(OrderRepository repository)
         {
             _repository = repository;
             var factory = new ConnectionFactory
@@ -45,7 +46,39 @@ namespace GeekShopping.OrderAPI.MessageConsumer
 
         private async Task ProcessOrder(CheckoutHeaderVO vo)
         {
-            throw new NotImplementedException();
+            OrderHeader order = new()
+            {
+                UserId = vo.UserId,
+                CouponCode = vo.CouponCode,
+                PurchaseAmount = vo.PurchaseAmount,
+                DiscountTotal = vo.DiscountTotal,
+                FirstName = vo.FirstName,
+                LastName = vo.LastName,
+                DateTime = vo.DateTime,
+                OrderTime = DateTime.Now,
+                Phone = vo.Phone,
+                Email = vo.Email,
+                CardNumber = vo.CardNumber,
+                CVV = vo.CVV,
+                ExpiryMonthYear = vo.ExpiryMonthYear,
+                PaymentStatus = false,
+                OrderDetails = new List<OrderDetail>(),
+            };
+
+            foreach (var orderDetail in vo.CartDetails)
+            {
+                OrderDetail detail = new()
+                {
+                    ProductId = orderDetail.ProductId,
+                    ProductName = orderDetail.Product.Name,
+                    Price = orderDetail.Product.Price,
+                    Count = orderDetail.Count,
+
+                };
+                order.OrderTotal += detail.Count;
+                order.OrderDetails.Add(detail);
+            }
+            await _repository.AddOrder(order);
         }
     }
 }
