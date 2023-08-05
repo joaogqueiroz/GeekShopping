@@ -75,7 +75,7 @@ public class CartController : ControllerBase
         var cart = await _repository.FindCartByUserId(vo.UserId);
         if (cart == null) return NotFound();
         vo.CartDetails = cart.CartDetails;
-        vo.Time = DateTime.Now;
+        vo.DateTime = DateTime.Now;
 
         // Calling rabbitMQ
         _rabbitMQMessageSender.SendMessage(vo, "checkoutqueue");
