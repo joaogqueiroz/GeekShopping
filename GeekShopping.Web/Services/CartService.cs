@@ -87,13 +87,17 @@ namespace GeekShopping.Web.Services
             }
         }
 
-        public async Task<CartHeaderViewModel> Checkout(CartHeaderViewModel cartHeader, string token)
+        public async Task<object> Checkout(CartHeaderViewModel cartHeader, string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _client.PostAsJsonAsync($"{BasePath}/checkout", cartHeader);
             if (response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadFromJsonAsync<CartHeaderViewModel>();
+            }
+            else if (response.StatusCode.ToString().Equals("PreconditionFailed"))
+            {
+                return "Coupon Price has changed, please confirm!";
             }
             else
             {
