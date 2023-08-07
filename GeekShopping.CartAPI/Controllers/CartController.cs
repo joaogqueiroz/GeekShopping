@@ -93,6 +93,7 @@ public class CartController : ControllerBase
 
         // Calling rabbitMQ
         _rabbitMQMessageSender.SendMessage(vo, "checkoutqueue");
+        await _cartRepository.ClearCart(vo.UserId);
         return Ok(vo);
     }
 }
