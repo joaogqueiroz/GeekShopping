@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Integration\GeekShopping.MessageBus\GeekShopping.MessageBus.csproj" />
+    <ProjectReference Include="..\GeekShopping.MessageBus\GeekShopping.MessageBus.csproj" />
   </ItemGroup>
 
 </Project>

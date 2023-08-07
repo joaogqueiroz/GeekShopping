@@ -26,7 +26,7 @@ namespace GeekShopping.OrderAPI.Repository
         {
             await using var _db = new SqlServerContext(_context);
             var header = await _db.Headers.FirstOrDefaultAsync( o => o.Id == orderHeaderId); 
-            if(header == null)
+            if(header != null)
             {
                 header.PaymentStatus = status;
                 await _db.SaveChangesAsync();

@@ -92,7 +92,8 @@ namespace GeekShopping.OrderAPI.MessageConsumer
                 ExpiryMonthYear = order.ExpiryMonthYear,
                 OrderId = order.Id,
                 PurchaseAmount = order.PurchaseAmount,
-                Email = order.Email
+                Email = order.Email,
+                MessageCreated = DateTime.Now
 
             };
 
