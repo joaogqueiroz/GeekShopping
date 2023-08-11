@@ -19,8 +19,6 @@ dbContextBuilder.UseSqlServer(connectionString);
 builder.Services.AddSingleton( new EmailRepository(dbContextBuilder.Options));
 builder.Services.AddScoped<IEmailRepository, EmailRepository>();
 builder.Services.AddHostedService<RabbitMQPaymentConsumer>();
-// builder.Services.AddHostedService<RabbitMQCheckoutConsumer>();
-// builder.Services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
 builder.Services.AddControllers();
 
 builder.Services.AddAuthentication("Bearer")
