@@ -31,9 +31,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeekShopping.PaymentAPI", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeekShopping.Email", "GeekShopping.Email\GeekShopping.Email.csproj", "{80D484AD-3A32-4A3D-BC6F-9B3632E3FBC3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Getway", "Getway", "{C3F4BA80-9525-4C89-B293-5F37213B33A8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{C3F4BA80-9525-4C89-B293-5F37213B33A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeekShopping.ApiGateway", "Getway\GeekShopping.ApiGateway\GeekShopping.ApiGateway.csproj", "{1E595F27-6089-413C-B7BB-A50D29231D3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeekShopping.ApiGateway", "Gateway\GeekShopping.ApiGateway\GeekShopping.ApiGateway.csproj", "{1E595F27-6089-413C-B7BB-A50D29231D3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
