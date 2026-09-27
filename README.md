@@ -48,6 +48,8 @@ Requirements: .NET 8 SDK (`global.json` requires 8.0.100 or a later 8.0 SDK) and
 docker compose up -d
 ```
 
+Each service that uses RabbitMQ reads the connection from the `RabbitMQ` section of its `appsettings.json`.
+
 Apply the migrations for each service that has a database, for example:
 
 ```sh

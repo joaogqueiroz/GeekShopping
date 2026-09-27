@@ -17,15 +17,15 @@ namespace GeekShopping.OrderAPI.MessageConsumer
         private IRabbitMQMessageSender _rabbitMQMessageSender;
 
         public RabbitMQCheckoutConsumer(OrderRepository repository,
-        IRabbitMQMessageSender rabbitMQMessageSender)
+        IRabbitMQMessageSender rabbitMQMessageSender, IConfiguration configuration)
         {
             _repository = repository;
             _rabbitMQMessageSender = rabbitMQMessageSender;
             var factory = new ConnectionFactory
             {
-                HostName = "localhost",
-                UserName = "guest",
-                Password = "guest"
+                HostName = configuration["RabbitMQ:HostName"],
+                UserName = configuration["RabbitMQ:UserName"],
+                Password = configuration["RabbitMQ:Password"]
             };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();

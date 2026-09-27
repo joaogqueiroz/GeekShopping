@@ -17,15 +17,15 @@ namespace GeekShopping.PaymentAPI.MessageConsumer
         private readonly IProcessPayment _processPayment;
 
         public RabbitMQPaymentConsumer(IProcessPayment processPayment,
-        IRabbitMQMessageSender rabbitMQMessageSender)
+        IRabbitMQMessageSender rabbitMQMessageSender, IConfiguration configuration)
         {
             _processPayment = processPayment;
             _rabbitMQMessageSender = rabbitMQMessageSender;
            var factory = new ConnectionFactory
             {
-                HostName = "localhost",
-                UserName = "guest",
-                Password = "guest"
+                HostName = configuration["RabbitMQ:HostName"],
+                UserName = configuration["RabbitMQ:UserName"],
+                Password = configuration["RabbitMQ:Password"]
             };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
