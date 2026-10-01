@@ -1,5 +1,7 @@
 # GeekShopping
 
+[![CI](https://github.com/joaogqueiroz/GeekShopping/actions/workflows/ci.yml/badge.svg)](https://github.com/joaogqueiroz/GeekShopping/actions/workflows/ci.yml)
+
 An e-commerce platform built as .NET microservices. Each service owns its own database, the front end talks to the APIs through an Ocelot gateway, authentication is handled by Duende IdentityServer, and checkout, payment and notifications run asynchronously over RabbitMQ.
 
 ## Services
