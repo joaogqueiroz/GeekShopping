@@ -59,3 +59,13 @@ dotnet ef database update --project GeekShopping.ProductAPI
 ```
 
 Then start the services. The simplest way is to open `GeekShopping.sln` in Visual Studio and set multiple startup projects: IdentityServer, ApiGateway, the APIs, Email and Web. Open the storefront at https://localhost:4430.
+
+## Tests
+
+`GeekShopping.Tests` has a folder per service. Repository tests run against SQL Server 2022 started by [Testcontainers](https://dotnet.testcontainers.org/), and each test class gets its own database built with that service's real EF Core migrations, so the only requirement is a running Docker.
+
+```sh
+dotnet test
+```
+
+They check the AutoMapper configuration of every API and the cart repository: adding items, adding the same product again, coupons, removing items and clearing the cart.

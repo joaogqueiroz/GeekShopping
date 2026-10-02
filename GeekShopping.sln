@@ -35,6 +35,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{C3F4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeekShopping.ApiGateway", "Gateway\GeekShopping.ApiGateway\GeekShopping.ApiGateway.csproj", "{1E595F27-6089-413C-B7BB-A50D29231D3A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeekShopping.Tests", "GeekShopping.Tests\GeekShopping.Tests.csproj", "{14A39C47-7D97-40E6-84D4-F3092A1F9261}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{1E595F27-6089-413C-B7BB-A50D29231D3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E595F27-6089-413C-B7BB-A50D29231D3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E595F27-6089-413C-B7BB-A50D29231D3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14A39C47-7D97-40E6-84D4-F3092A1F9261}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14A39C47-7D97-40E6-84D4-F3092A1F9261}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14A39C47-7D97-40E6-84D4-F3092A1F9261}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14A39C47-7D97-40E6-84D4-F3092A1F9261}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
