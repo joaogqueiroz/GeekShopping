@@ -37,6 +37,7 @@ public class CartController : ControllerBase
     [HttpPost("add-cart")]
     public async Task<ActionResult<CartVO>> AddCart(CartVO cartVO)
     {
+        if (cartVO.CartHeader == null || cartVO.CartDetails?.Any() != true) return BadRequest("The cart needs a header and at least one item.");
         var cart = await _cartRepository.SaveOrUpdateCart(cartVO);
         if (cart == null) return NotFound();
         return Ok(cart);
@@ -45,6 +46,7 @@ public class CartController : ControllerBase
     [HttpPut("update-cart")]
     public async Task<ActionResult<CartVO>> UpdateCart(CartVO cartVO)
     {
+        if (cartVO.CartHeader == null || cartVO.CartDetails?.Any() != true) return BadRequest("The cart needs a header and at least one item.");
         var cart = await _cartRepository.SaveOrUpdateCart(cartVO);
         if (cart == null) return NotFound();
         return Ok(cart);

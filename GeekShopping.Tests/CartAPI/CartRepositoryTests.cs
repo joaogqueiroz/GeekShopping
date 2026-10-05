@@ -152,5 +152,33 @@ namespace GeekShopping.Tests.CartAPI
         {
             Assert.False(await Repository().ClearCart(NewUser()));
         }
+
+        [Fact]
+        public async Task RemoveFromCart_UnknownItem_ReturnsFalseAndKeepsOtherCarts()
+        {
+            var userId = NewUser();
+            await Repository().SaveOrUpdateCart(AddItem(userId, productId: 1011, count: 1));
+
+            Assert.False(await Repository().RemoveFromCart(999_999));
+
+            Assert.Single((await Repository().FindCartByUserId(userId)).CartDetails!);
+        }
+
+        [Fact]
+        public async Task RemoveCoupon_UserWithoutCart_ReturnsFalse()
+        {
+            Assert.False(await Repository().RemoveCoupon(NewUser()));
+        }
+
+        [Fact]
+        public async Task FindCartByUserId_UserWithoutCart_ReturnsAnEmptyCartNotNull()
+        {
+            // Checkout relies on this: it must look at the items, not at a null cart
+            var cart = await Repository().FindCartByUserId(NewUser());
+
+            Assert.NotNull(cart);
+            Assert.Equal(0, cart.CartHeader!.Id);
+            Assert.Empty(cart.CartDetails!);
+        }
     }
 }
