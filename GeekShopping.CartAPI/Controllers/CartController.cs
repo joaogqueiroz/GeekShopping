@@ -1,3 +1,4 @@
+using GeekShopping.CartAPI.Data;
 using GeekShopping.CartAPI.Data.ValueObjects;
 using GeekShopping.CartAPI.Messages;
 using GeekShopping.CartAPI.RabbitMQSender;
@@ -79,16 +80,23 @@ public class CartController : ControllerBase
         var token = await HttpContext.GetTokenAsync("access_token");
         if(vo?.UserId == null) return BadRequest();
         var cart = await _cartRepository.FindCartByUserId(vo.UserId);
-        if (cart == null) return NotFound();
+        // FindCartByUserId returns an empty cart, not null, for a user without one
+        if (cart?.CartDetails == null || !cart.CartDetails.Any()) return BadRequest("The cart is empty.");
+        decimal discount = 0;
         if (!string.IsNullOrEmpty(vo.CouponCode))
         {
             CouponVO coupon = await _couponRepository.GetCouponByCouponCode(vo.CouponCode, token);
-            if (vo.DiscountTotal != coupon.DiscountAmount)
+            // The coupon repository answers an unknown code with an empty coupon
+            if (coupon?.CouponCode == null || vo.DiscountTotal != coupon.DiscountAmount)
             {
                 return StatusCode(412);
             }
+            discount = coupon.DiscountAmount ?? 0;
         }
         vo.CartDetails = cart.CartDetails;
+        // OrderAPI charges PurchaseAmount, so it comes from the saved cart, not from the request
+        vo.DiscountTotal = discount;
+        vo.PurchaseAmount = PurchaseAmountCalculator.Calculate(cart.CartDetails, discount);
         vo.DateTime = DateTime.Now;
 
         // Calling rabbitMQ

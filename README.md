@@ -68,4 +68,4 @@ Then start the services. The simplest way is to open `GeekShopping.sln` in Visua
 dotnet test
 ```
 
-They check the AutoMapper configuration of every API, the cart repository (adding items, adding the same product again, coupons, removing items, clearing the cart), checkout (coupon validation, publishing the order to RabbitMQ and clearing the cart, with the dependencies mocked) and the product catalogue (seeded products, create, update and delete).
+They check the AutoMapper configuration of every API, the cart repository (adding items, adding the same product again, coupons, removing items, clearing the cart), the purchase amount (price × quantity, discounts, exact decimals, invalid quantities and prices), checkout (the amount comes from the saved cart and never from the request, coupon validation, empty carts, publishing the order to RabbitMQ and clearing the cart, with the dependencies mocked) and the product catalogue (seeded products, create, update and delete).
