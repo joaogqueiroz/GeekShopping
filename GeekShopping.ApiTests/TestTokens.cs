@@ -48,8 +48,9 @@ namespace GeekShopping.ApiTests
                     IssuerSigningKey = Key,
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ValidateLifetime = true,
-                    RoleClaimType = "role"
+                    // RoleClaimType stays the default, as in the APIs: JwtBearer maps the "role"
+                    // claim from IdentityServer to ClaimTypes.Role before [Authorize(Roles)] checks it.
+                    ValidateLifetime = true
                 };
             });
     }
