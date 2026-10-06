@@ -1,5 +1,6 @@
 using GeekShopping.Web.Models;
 using GeekShopping.Web.Services.IServices;
+using GeekShopping.Web.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -117,16 +118,7 @@ namespace GeekShopping.Web.Controllers
                         response.CartHeader.DiscountTotal = coupon.DiscountAmount;
                     }
                 }
-                response.CartHeader.PurchaseAmount = 0;
-                foreach (var detail in response.CartDetails)
-                {
-                    response.CartHeader.PurchaseAmount += (detail.Product.Price * detail.Count);
-
-                }
-                Console.WriteLine(response.CartHeader.PurchaseAmount);
-                Console.WriteLine(response.CartHeader.DiscountTotal);
-                response.CartHeader.PurchaseAmount -= response.CartHeader.DiscountTotal;
-                Console.WriteLine(response.CartHeader.PurchaseAmount);
+                response.CartHeader.PurchaseAmount = CartTotals.PurchaseAmount(response.CartDetails, response.CartHeader.DiscountTotal);
             }
             return response;
         }
