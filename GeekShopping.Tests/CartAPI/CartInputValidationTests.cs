@@ -3,6 +3,8 @@ using GeekShopping.CartAPI.Controllers;
 using GeekShopping.CartAPI.Data.ValueObjects;
 using GeekShopping.CartAPI.RabbitMQSender;
 using GeekShopping.CartAPI.Repository;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -12,8 +14,18 @@ namespace GeekShopping.Tests.CartAPI
     {
         private readonly Mock<ICartRepository> _cartRepository = new();
 
+        // Signed in as user-1, the owner of the carts built below
         private CartController CreateController() =>
-            new CartController(_cartRepository.Object, new Mock<IRabbitMQMessageSender>().Object, new Mock<ICouponRepository>().Object);
+            new CartController(_cartRepository.Object, new Mock<IRabbitMQMessageSender>().Object, new Mock<ICouponRepository>().Object)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext
+                    {
+                        User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("sub", "user-1") }, "Bearer"))
+                    }
+                }
+            };
 
         private static CartVO Cart(params CartDetailVO[] items) => new CartVO
         {
@@ -103,13 +115,43 @@ namespace GeekShopping.Tests.CartAPI
         }
 
         [Fact]
-        public async Task RemoveCart_UnknownItem_Returns400()
+        public async Task RemoveCart_ItemNotInTheUsersCart_Returns404AndRemovesNothing()
         {
-            _cartRepository.Setup(r => r.RemoveFromCart(999)).ReturnsAsync(false);
+            _cartRepository.Setup(r => r.FindCartByUserId("user-1"))
+                .ReturnsAsync(Cart(new CartDetailVO { Id = 1, ProductId = 1, Count = 1 }));
 
+            // 999 is not in user-1's cart: unknown, or someone else's
             var result = await CreateController().RemoveCart(999);
 
-            Assert.IsType<BadRequestResult>(result.Result);
+            Assert.IsType<NotFoundResult>(result.Result);
+            _cartRepository.Verify(r => r.RemoveFromCart(It.IsAny<long>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task RemoveCart_ItemInTheUsersCart_IsRemoved()
+        {
+            _cartRepository.Setup(r => r.FindCartByUserId("user-1"))
+                .ReturnsAsync(Cart(new CartDetailVO { Id = 1, ProductId = 1, Count = 1 }));
+            _cartRepository.Setup(r => r.RemoveFromCart(1)).ReturnsAsync(true);
+
+            var result = await CreateController().RemoveCart(1);
+
+            Assert.IsType<OkObjectResult>(result.Result);
+        }
+
+        [Fact]
+        public async Task AddCart_ForAnotherUser_IsForbidden()
+        {
+            var cart = new CartVO
+            {
+                CartHeader = new CartHeaderVO { UserId = "another-user" },
+                CartDetails = new[] { new CartDetailVO { ProductId = 1, Count = 1 } }
+            };
+
+            var result = await CreateController().AddCart(cart);
+
+            Assert.IsType<ForbidResult>(result.Result);
+            _cartRepository.Verify(r => r.SaveOrUpdateCart(It.IsAny<CartVO>()), Times.Never);
         }
     }
 }

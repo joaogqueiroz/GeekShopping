@@ -65,8 +65,26 @@ namespace GeekShopping.Tests.CartAPI
 
             return new CartController(_cartRepository.Object, _messageSender.Object, _couponRepository.Object)
             {
-                ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext { RequestServices = services } }
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext
+                    {
+                        RequestServices = services,
+                        // The signed-in user owns the cart under test
+                        User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim("sub", UserId) }, "Bearer"))
+                    }
+                }
             };
+        }
+
+        [Fact]
+        public async Task Checkout_SomeoneElsesCart_IsForbidden()
+        {
+            var result = await CreateController().Checkout(new CheckoutHeaderVO { UserId = "another-user" });
+
+            Assert.IsType<ForbidResult>(result.Result);
+            VerifyNothingWasOrdered();
+            _cartRepository.Verify(r => r.FindCartByUserId(It.IsAny<string>()), Times.Never);
         }
 
         private void VerifyNothingWasOrdered()
