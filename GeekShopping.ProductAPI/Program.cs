@@ -15,7 +15,7 @@ var connectionString = builder.Configuration.GetConnectionString("GeekShoppingPr
 builder.Services.AddDbContext<SqlServerContext>(options => options.UseSqlServer(connectionString));
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(typeof(MappingConfig).Assembly);
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddControllers();
 

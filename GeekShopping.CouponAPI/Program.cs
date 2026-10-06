@@ -16,7 +16,7 @@ var connectionString = builder.Configuration.GetConnectionString("GeekShoppingCo
 
  IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(typeof(MappingConfig).Assembly);
 
 builder.Services.AddScoped<ICouponRepository, CouponRepository>();
 
