@@ -26,6 +26,7 @@
     <ProjectReference Include="..\GeekShopping.CartAPI\GeekShopping.CartAPI.csproj" />
     <ProjectReference Include="..\GeekShopping.ProductAPI\GeekShopping.ProductAPI.csproj" />
     <ProjectReference Include="..\GeekShopping.CouponAPI\GeekShopping.CouponAPI.csproj" />
+    <ProjectReference Include="..\GeekShopping.OrderAPI\GeekShopping.OrderAPI.csproj" />
   </ItemGroup>
 
 </Project>

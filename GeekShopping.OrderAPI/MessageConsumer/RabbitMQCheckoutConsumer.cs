@@ -50,52 +50,10 @@ namespace GeekShopping.OrderAPI.MessageConsumer
 
         private async Task ProcessOrder(CheckoutHeaderVO vo)
         {
-            OrderHeader order = new()
-            {
-                UserId = vo.UserId,
-                CouponCode = vo.CouponCode,
-                PurchaseAmount = vo.PurchaseAmount,
-                DiscountTotal = vo.DiscountTotal,
-                FirstName = vo.FirstName,
-                LastName = vo.LastName,
-                DateTime = vo.DateTime,
-                OrderTime = DateTime.Now,
-                Phone = vo.Phone,
-                Email = vo.Email,
-                CardNumber = vo.CardNumber,
-                CVV = vo.CVV,
-                ExpiryMonthYear = vo.ExpiryMonthYear,
-                PaymentStatus = false,
-                OrderDetails = new List<OrderDetail>(),
-            };
-
-            foreach (var orderDetail in vo.CartDetails)
-            {
-                OrderDetail detail = new()
-                {
-                    ProductId = orderDetail.ProductId,
-                    ProductName = orderDetail.Product.Name,
-                    Price = orderDetail.Product.Price,
-                    Count = orderDetail.Count,
-
-                };
-                order.OrderTotal += detail.Count;
-                order.OrderDetails.Add(detail);
-            }
+            OrderHeader order = CheckoutOrderBuilder.BuildOrder(vo);
             await _repository.AddOrder(order);
 
-            PaymentVO payment = new()
-            {
-                Name = order.FirstName + " " + order.LastName,
-                CardNumber = order.CardNumber,
-                CVV = order.CVV,
-                ExpiryMonthYear = order.ExpiryMonthYear,
-                OrderId = order.Id,
-                PurchaseAmount = order.PurchaseAmount,
-                Email = order.Email,
-                MessageCreated = DateTime.Now
-
-            };
+            PaymentVO payment = CheckoutOrderBuilder.BuildPayment(order);
 
             try
             {
