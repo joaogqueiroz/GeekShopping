@@ -4,6 +4,49 @@
 
 An e-commerce platform built as .NET microservices. Each service owns its own database, the front end talks to the APIs through an Ocelot gateway, authentication is handled by Duende IdentityServer, and checkout, payment and notifications run asynchronously over RabbitMQ.
 
+## Architecture
+
+```mermaid
+flowchart TB
+    browser([Browser]) --> web["GeekShopping.Web<br/>MVC storefront"]
+    web -- "login, tokens" --> ids["IdentityServer<br/>Admin and Client roles"]
+    web -- "HTTPS + access token" --> gw["Ocelot API gateway"]
+
+    subgraph sync ["HTTP APIs"]
+        direction LR
+        product["ProductAPI"]
+        cart["CartAPI"]
+        coupon["CouponAPI"]
+    end
+
+    gw --> product
+    gw --> cart
+    gw --> coupon
+    cart -- "coupon lookup" --> coupon
+
+    subgraph rabbit ["RabbitMQ"]
+        direction LR
+        checkoutq[["checkoutqueue"]]
+        paymentq[["orderpaymentprocessqueue"]]
+        exchange{{"DirectPaymentUpdateExchange"}}
+    end
+
+    subgraph async ["Message consumers"]
+        direction LR
+        order["OrderAPI"]
+        payment["PaymentAPI<br/>simulated gateway"]
+        email["Email"]
+    end
+
+    cart -- "checkout" --> checkoutq --> order
+    order -- "payment request" --> paymentq --> payment
+    payment -- "payment result" --> exchange
+    exchange -- "PaymentOrder" --> order
+    exchange -- "PaymentEmail" --> email
+```
+
+The storefront logs people in through IdentityServer and calls the HTTP APIs through the gateway with the access token. Checkout, payment and the order status run over RabbitMQ.
+
 ## Services
 
 | Service | Port | What it does |
@@ -24,12 +67,41 @@ Each API has its own SQL Server database (`geek_shopping_product`, `geek_shoppin
 
 ## Checkout flow
 
-```
-Web ─▶ Gateway ─▶ CartAPI ──(checkoutqueue)──▶ OrderAPI ──(orderpaymentprocessqueue)──▶ PaymentAPI
-                                                   ▲                                          │
-                                                   │        DirectPaymentUpdateExchange       │
-                                                   └──── PaymentOrder ◀──────┬────────────────┘
-                                                              Email ◀── PaymentEmail
+```mermaid
+sequenceDiagram
+    autonumber
+    actor customer as Customer
+    participant web as Web
+    participant gw as Gateway
+    participant cart as CartAPI
+    participant coupon as CouponAPI
+    participant mq as RabbitMQ
+    participant order as OrderAPI
+    participant payment as PaymentAPI
+    participant email as Email
+
+    customer->>web: Confirm the order
+    web->>gw: POST /api/v1/cart/checkout (access token)
+    gw->>cart: forward
+    opt a coupon is applied
+        cart->>coupon: GET /api/v1/coupon/{code}
+        coupon-->>cart: discount
+    end
+    cart->>cart: total from the saved cart, minus the discount
+    cart->>mq: checkoutqueue
+    cart->>cart: clear the cart
+    cart-->>web: 200 OK
+    mq->>order: checkout
+    order->>order: save the order, payment pending
+    order->>mq: orderpaymentprocessqueue
+    mq->>payment: payment request
+    payment->>payment: process the payment
+    payment->>mq: result on DirectPaymentUpdateExchange
+    par routing key PaymentOrder
+        mq->>order: update the payment status
+    and routing key PaymentEmail
+        mq->>email: log the notification
+    end
 ```
 
 1. **CartAPI** publishes the checkout to `checkoutqueue`.
