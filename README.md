@@ -4,6 +4,16 @@
 
 An e-commerce platform built as .NET microservices. Each service owns its own database, the front end talks to the APIs through an Ocelot gateway, authentication is handled by Duende IdentityServer, and checkout, payment and notifications run asynchronously over RabbitMQ.
 
+## Screenshots
+
+![Buying a product: storefront, login on IdentityServer, product page, cart with a coupon, checkout and confirmation](docs/images/checkout-flow.gif)
+
+| Storefront | Login (IdentityServer) | Cart with a coupon |
+| --- | --- | --- |
+| ![Storefront with the product catalogue](docs/images/storefront.png) | ![IdentityServer login page](docs/images/login.png) | ![Cart with the GEEK_2023_10 coupon applied](docs/images/cart.png) |
+
+The storefront and the IdentityServer pages are ASP.NET Core MVC with Razor views, Bootstrap 5.3 and jQuery 3.7. Product photos are loaded from the original course repository on GitHub.
+
 ## Architecture
 
 ```mermaid
@@ -111,7 +121,7 @@ sequenceDiagram
 
 ## Tech stack
 
-C# · .NET 8 · ASP.NET Core Web API and MVC · Ocelot · Duende IdentityServer · ASP.NET Identity · Entity Framework Core · SQL Server · RabbitMQ · AutoMapper · Swagger · Docker Compose
+C# · .NET 8 · ASP.NET Core Web API and MVC · Razor · Bootstrap 5.3 · jQuery 3.7 · Ocelot · Duende IdentityServer · ASP.NET Identity · Entity Framework Core · SQL Server · RabbitMQ · AutoMapper · Swagger · Docker Compose
 
 ## Running locally
 
@@ -130,7 +140,15 @@ Apply the migrations for each service that has a database, for example:
 dotnet ef database update --project GeekShopping.ProductAPI
 ```
 
+The services call each other over HTTPS, so trust the ASP.NET Core development certificate once (Windows and macOS ask you to confirm):
+
+```sh
+dotnet dev-certs https --trust
+```
+
 Then start the services. The simplest way is to open `GeekShopping.sln` in Visual Studio and set multiple startup projects: IdentityServer, ApiGateway, the APIs, Email and Web. Open the storefront at https://localhost:4430.
+
+IdentityServer creates two users on first start: `client` (role Client) and `Admin` (role Admin), both with the password `Test123@`. The coupons `GEEK_2023_10` and `GEEK_2023_15` take R$ 10 and R$ 15 off.
 
 ## Tests
 
