@@ -18,6 +18,7 @@ using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Test;
 using Microsoft.AspNetCore.Identity;
+using GeekShopping.IdentityServer.Configuration;
 using GeekShopping.IdentityServer.Model;
 using GeekShopping.IdentityServer.MainModule.Account;
 using System.Collections.Generic;
@@ -259,13 +260,6 @@ namespace IdentityServerHost.Quickstart.UI
         [HttpGet]
         public async Task<IActionResult> Register(string returnUrl)
         {
-            List<string> roles = new List<string>();
-
-            roles.Add("Admin");
-
-            roles.Add("Client");
-
-            ViewBag.message = roles;
             ViewData["ReturnUrl"] = returnUrl;
             // build a model so we know what to show on the reg page
             var vm = await BuildRegisterViewModelAsync(returnUrl);
@@ -293,18 +287,14 @@ namespace IdentityServerHost.Quickstart.UI
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    if (!_roleManager.RoleExistsAsync(model.RoleName).GetAwaiter().GetResult())
+                    // Self-service sign-up always creates a client. Administrators are only
+                    // created by the seed (DbInitializer), never from this public form.
+                    if (!await _roleManager.RoleExistsAsync(IdentityConfiguration.Client))
                     {
-                        var userRole = new IdentityRole
-                        {
-                            Name = model.RoleName,
-                            NormalizedName = model.RoleName,
-
-                        };
-                        await _roleManager.CreateAsync(userRole);
+                        await _roleManager.CreateAsync(new IdentityRole(IdentityConfiguration.Client));
                     }
 
-                    await _userManager.AddToRoleAsync(user, model.RoleName);
+                    await _userManager.AddToRoleAsync(user, IdentityConfiguration.Client);
 
                     await _userManager.AddClaimsAsync(user, new Claim[]{
                     new Claim(JwtClaimTypes.Name, model.Username),
@@ -362,12 +352,6 @@ namespace IdentityServerHost.Quickstart.UI
         private async Task<RegisterViewModel> BuildRegisterViewModelAsync(string returnUrl)
         {
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
-            List<string> roles = new List<string>
-            {
-                "Admin",
-                "Client"
-            };
-            ViewBag.message = roles;
             ViewData["ReturnUrl"] = returnUrl;
             if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP) != null)
             {
