@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - GeekShopping</title>
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/theme.css" asp-append-version="true" />
+</head>
+<body>
+    @* Sign in and create account: the store's side panel next to the form *@
+    <div class="auth">
+        <aside class="auth-side">
+            <span class="logo">Geek<b>Shopping</b></span>
+            <p>@ViewData["Pitch"]</p>
+            <small>Accounts are managed by GeekShopping Identity</small>
+        </aside>
+        <main class="auth-form">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.slim.min.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

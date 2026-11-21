@@ -1,0 +1,81 @@
+/* GeekShopping look for the identity pages: the store's palette and fonts on top of Bootstrap 5.3,
+   set through its CSS variables so every template page follows, plus the split sign-in layout. */
+
+@font-face { font-family: "Barlow Condensed"; font-weight: 700; font-display: swap; src: url("../fonts/barlow-condensed-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Source Sans 3"; font-weight: 400; font-display: swap; src: url("../fonts/source-sans-3-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Source Sans 3"; font-weight: 600; font-display: swap; src: url("../fonts/source-sans-3-latin-600-normal.woff2") format("woff2"); }
+
+:root {
+  --ink: #1C1F3B;
+  --shelf: #ECEEF5;
+  --line: #D6D9E6;
+  --muted: #5B5F7A;
+  --sticker: #FFD23F;
+  --red: #D7263D;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+
+  --bs-body-font-family: "Source Sans 3", system-ui, sans-serif;
+  --bs-body-font-size: 1.0625rem;
+  --bs-body-color: var(--ink);
+  --bs-body-bg: var(--shelf);
+  --bs-border-color: var(--line);
+  --bs-link-color: var(--ink);
+  --bs-link-color-rgb: 28, 31, 59;
+  --bs-link-hover-color: var(--ink);
+  --bs-link-hover-color-rgb: 28, 31, 59;
+  --bs-border-radius: 10px;
+  --bs-focus-ring-color: rgba(255, 210, 63, .6);
+}
+
+h1, h2, h3, .h1, .h2, .h3 { font-family: var(--display); font-weight: 700; letter-spacing: .2px; }
+.lead h1 { font-size: 46px; }
+.card { border-color: var(--line); border-radius: 12px; }
+.card-header { background: #fff; border-bottom-color: var(--line); }
+.card-header h2 { font-size: 26px; margin: 0; }
+.form-control, .form-select { border: 1.5px solid var(--line); padding: 11px 14px; }
+.form-control:focus, .form-select:focus { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(255, 210, 63, .6); }
+.btn { border-radius: 10px; padding: 10px 20px; font-weight: 600; }
+.btn-primary { --bs-btn-bg: var(--ink); --bs-btn-border-color: var(--ink); --bs-btn-hover-bg: #2E3360; --bs-btn-hover-border-color: #2E3360; --bs-btn-active-bg: #2E3360; --bs-btn-active-border-color: #2E3360; }
+.btn-secondary { --bs-btn-color: var(--ink); --bs-btn-bg: transparent; --bs-btn-border-color: var(--ink); --bs-btn-hover-color: #fff; --bs-btn-hover-bg: var(--ink); --bs-btn-hover-border-color: var(--ink); --bs-btn-active-bg: var(--ink); }
+.btn-danger { --bs-btn-bg: var(--red); --bs-btn-border-color: var(--red); }
+.alert-danger { --bs-alert-color: var(--red); --bs-alert-bg: #FFF4F5; --bs-alert-border-color: transparent; border-left: 4px solid var(--red); }
+:focus-visible { outline: 3px solid var(--sticker); outline-offset: 2px; }
+
+/* Top bar of the template pages */
+.nav-page .navbar { background: var(--ink) !important; padding: 14px 28px; }
+.nav-page .navbar-brand { font: 700 28px/1 var(--display); color: #fff; }
+.nav-page .navbar-brand b { color: var(--sticker); font-weight: 700; }
+.nav-page .navbar-brand small { font: 600 16px var(--bs-body-font-family); opacity: .8; margin-left: 6px; }
+
+/* Sign in and create account: split layout */
+.auth { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+.auth-side { background: var(--ink); color: #fff; padding: 56px; display: flex; flex-direction: column; justify-content: space-between; }
+.auth-side .logo { font: 700 30px/1 var(--display); color: #fff; text-decoration: none; letter-spacing: .5px; }
+.auth-side .logo b { color: var(--sticker); font-weight: 700; }
+.auth-side p { max-width: 34ch; font-size: 20px; opacity: .9; margin: 0; }
+.auth-side small { opacity: .6; }
+.auth-form { padding: 56px; display: flex; flex-direction: column; justify-content: center; max-width: 560px; width: 100%; }
+.auth-form h1 { font-size: 48px; margin-bottom: 6px; }
+.auth-form .field { display: grid; gap: 6px; margin-top: 18px; font-weight: 600; font-size: 15px; }
+.auth-form .field input { width: 100%; border: 1.5px solid var(--line); border-radius: 10px; padding: 13px 14px; font: 400 17px var(--bs-body-font-family); background: #fff; color: var(--ink); }
+.auth-form .field input:focus { border-color: var(--ink); outline: none; box-shadow: 0 0 0 3px rgba(255, 210, 63, .6); }
+.auth-form .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+.auth-form .grid2 > * { min-width: 0; }
+.auth-form .row-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; font-size: 15px; }
+.auth-form .row-line label { display: inline-flex; gap: 8px; align-items: center; font-weight: 400; }
+.auth-form .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.auth-form .actions .btn-primary { flex: 1; padding: 12px 20px; }
+.auth-form .alt { margin-top: 18px; color: var(--muted); font-size: 15px; }
+.auth-form .alt a { color: var(--ink); }
+.auth-form .alert { margin: 14px 0 0; }
+.auth-form .external { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); }
+.auth-form .external ul { list-style: none; padding: 0; margin: 10px 0 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.field-validation-error, .text-danger { color: var(--red); font-weight: 400; font-size: 14px; }
+
+@media (max-width: 760px) {
+  .auth { grid-template-columns: 1fr; }
+  .auth-side { padding: 28px 22px; gap: 18px; }
+  .auth-form { padding: 32px 22px; }
+  .auth-form .grid2 { grid-template-columns: 1fr; }
+  .nav-page .navbar { padding: 12px 18px; }
+}

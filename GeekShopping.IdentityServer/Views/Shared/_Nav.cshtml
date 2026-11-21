@@ -8,25 +8,21 @@
 }
 
 <div class="nav-page">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark">
 
-        <a href="~/" class="navbar-brand">
-            <img src="~/duende-logo.svg" class="icon-banner">
-            Duende IdentityServer
-        </a>
+        <a href="~/" class="navbar-brand">Geek<b>Shopping</b><small>Identity</small></a>
 
         @if (!string.IsNullOrWhiteSpace(name))
         {
             <ul class="navbar-nav me-auto">
                 <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">@name <b class="caret"></b></a>
-                    
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">@name</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a>
+                        <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Log out</a>
                     </div>
-              </li>
+                </li>
             </ul>
         }
-    
+
     </nav>
 </div>

@@ -1,55 +1,24 @@
 @model GeekShopping.IdentityServer.MainModule.Account.RegisterViewModel
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Create an account";
+    ViewData["Pitch"] = "Create an account to save your cart and follow your orders.";
+}
 
-<div class="login-page">
-    <div class="lead">
-        <h1>Register</h1>
-        <p>Choose how to register</p>
+<h1>Create an account</h1>
+<partial name="_ValidationSummary" />
+
+<form asp-controller="Account" asp-action="Register" method="post">
+    <input type="hidden" asp-for="ReturnUrl" />
+    <div class="grid2">
+        <label class="field">First name<input asp-for="FirstName" autocomplete="given-name" autofocus></label>
+        <label class="field">Last name<input asp-for="LastName" autocomplete="family-name"></label>
     </div>
-     
-    <partial name="_ValidationSummary" />
-
-    <div class="row">
-
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-header">
-                    <h2>Local Account Register</h2>
-                </div>
-
-                <div class="card-body">
-                    <form asp-route="Login">
-                        <input type="hidden" asp-for="ReturnUrl" />
-
-                        <div class="mb-3">
-                            <label asp-for="Username"></label>
-                            <input class="form-control" placeholder="Username" asp-for="Username" autofocus>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="Email"></label>
-                            <input class="form-control" placeholder="email" asp-for="Email" autofocus>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="FirstName"></label>
-                            <input class="form-control" placeholder="first name" asp-for="FirstName" autofocus>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="LastName"></label>
-                            <input class="form-control" placeholder="lastname" asp-for="LastName" autofocus>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="Password"></label>
-                            <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
-                        </div>
-                        <button class="btn btn-primary" name="button" value="Register">Register</button>
-                        <button class="btn btn-secondary" name="button" value="cancel">Cancel</button>
-                    </form>
-                </div>
-                <div class="card-footer">
-                    <a href="@Url.Action("Login",new {Model.ReturnUrl })">Login</a>
-                </div>
-            </div>
-        </div>
-
-
+    <label class="field">Email<input asp-for="Email" type="email" autocomplete="email"></label>
+    <label class="field">Username<input asp-for="Username" autocomplete="username"></label>
+    <label class="field">Password<input type="password" asp-for="Password" autocomplete="new-password"></label>
+    <div class="actions">
+        <button class="btn btn-primary" name="button" value="Register">Create account</button>
     </div>
-</div>
+</form>
+<p class="alt">Already have one? <a href="@Url.Action("Login", new { Model.ReturnUrl })">Sign in</a></p>

@@ -1,93 +1,48 @@
 @model LoginViewModel
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Sign in";
+    ViewData["Pitch"] = "Sign in to keep your cart, use your coupons and follow your orders.";
+}
 
-<div class="login-page">
-    <div class="lead">
-        <h1>Login</h1>
-        <p>Choose how to login</p>
+<h1>Sign in</h1>
+<partial name="_ValidationSummary" />
+
+@if (Model.EnableLocalLogin)
+{
+    <form asp-route="Login">
+        <input type="hidden" asp-for="ReturnUrl" />
+        <label class="field">Username<input asp-for="Username" autocomplete="username" autofocus></label>
+        <label class="field">Password<input type="password" asp-for="Password" autocomplete="current-password"></label>
+        @if (Model.AllowRememberLogin)
+        {
+            <div class="row-line"><label><input type="checkbox" class="form-check-input" asp-for="RememberLogin"> Remember me</label></div>
+        }
+        <div class="actions">
+            <button class="btn btn-primary" name="button" value="login">Sign in</button>
+            <button class="btn btn-secondary" name="button" value="cancel">Back to the store</button>
+        </div>
+    </form>
+    <p class="alt">New here? <a href="@Url.Action("Register", new { Model.ReturnUrl })">Create an account</a></p>
+}
+
+@if (Model.VisibleExternalProviders.Any())
+{
+    <div class="external">
+        <strong>Or sign in with</strong>
+        <ul>
+            @foreach (var provider in Model.VisibleExternalProviders)
+            {
+                <li>
+                    <a class="btn btn-secondary" asp-controller="External" asp-action="Challenge"
+                       asp-route-scheme="@provider.AuthenticationScheme" asp-route-returnUrl="@Model.ReturnUrl">@provider.DisplayName</a>
+                </li>
+            }
+        </ul>
     </div>
+}
 
-    <partial name="_ValidationSummary" />
-
-    <div class="row">
-
-        @if (Model.EnableLocalLogin)
-        {
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Local Account</h2>
-                    </div>
-
-                    <div class="card-body">
-                        <form asp-route="Login">
-                            <input type="hidden" asp-for="ReturnUrl" />
-
-                            <div class="mb-3">
-                                <label asp-for="Username"></label>
-                                <input class="form-control" placeholder="Username" asp-for="Username" autofocus>
-                            </div>
-                            <div class="mb-3">
-                                <label asp-for="Password"></label>
-                                <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
-                            </div>
-                            @if (Model.AllowRememberLogin)
-                            {
-                                <div class="mb-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input" asp-for="RememberLogin">
-                                        <label class="form-check-label" asp-for="RememberLogin">
-                                            Remember My Login
-                                        </label>
-                                    </div>
-                                </div>
-                            }
-                            <button class="btn btn-primary" name="button" value="login">Login</button>
-                            <button class="btn btn-secondary" name="button" value="cancel">Cancel</button>
-                        </form>
-                    </div>
-
-                    <div class="card-footer">
-                        <a href="@Url.Action("Register", new {Model.ReturnUrl})">
-                            New User? Create Account
-                        </a>
-                    </div>
-                </div>
-            </div>
-        }
-
-        @if (Model.VisibleExternalProviders.Any())
-        {
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>External Account</h2>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-inline">
-                            @foreach (var provider in Model.VisibleExternalProviders)
-                            {
-                                <li class="list-inline-item">
-                                    <a class="btn btn-secondary"
-                                       asp-controller="External"
-                                       asp-action="Challenge"
-                                       asp-route-scheme="@provider.AuthenticationScheme"
-                                       asp-route-returnUrl="@Model.ReturnUrl">
-                                        @provider.DisplayName
-                                    </a>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        }
-
-        @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
-        {
-            <div class="alert alert-warning">
-                <strong>Invalid login request</strong>
-                There are no login schemes configured for this request.
-            </div>
-        }
-    </div>
-</div>
+@if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+{
+    <div class="alert alert-danger">Sign-in is not available for this request: no login method is configured.</div>
+}
