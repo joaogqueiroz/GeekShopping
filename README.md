@@ -12,7 +12,7 @@ An e-commerce platform built as .NET microservices. Each service owns its own da
 | --- | --- | --- |
 | ![Storefront with the product catalogue](docs/images/storefront.png) | ![IdentityServer login page](docs/images/login.png) | ![Cart with the GEEK_2023_10 coupon applied](docs/images/cart.png) |
 
-The storefront and the IdentityServer pages are ASP.NET Core MVC with Razor views, Bootstrap 5.3 and jQuery 3.7. Product photos are loaded from the original course repository on GitHub.
+The storefront is ASP.NET Core MVC with Razor views and its own stylesheet: products are shown as blister cards, like action figure packaging, with Barlow Condensed and Source Sans 3 served from `wwwroot/fonts`; jQuery is only used for form validation. The sign-in and create account pages share that look, and the other IdentityServer pages keep Bootstrap 5.3 themed through its CSS variables. Product photos are loaded from the original course repository on GitHub.
 
 ## Architecture
 
@@ -121,7 +121,7 @@ sequenceDiagram
 
 ## Tech stack
 
-C# · .NET 8 · ASP.NET Core Web API and MVC · Razor · Bootstrap 5.3 · jQuery 3.7 · Ocelot · Duende IdentityServer · ASP.NET Identity · Entity Framework Core · SQL Server · RabbitMQ · AutoMapper · Swagger · Docker Compose
+C# · .NET 8 · ASP.NET Core Web API and MVC · Razor · Ocelot · Duende IdentityServer · ASP.NET Identity · Entity Framework Core · SQL Server · RabbitMQ · AutoMapper · Swagger · Docker Compose
 
 ## Running locally
 
