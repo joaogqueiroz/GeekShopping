@@ -1,62 +1,31 @@
 @model GeekShopping.Web.Models.ProductViewModel
+@{
+    ViewData["Title"] = "Delete product";
+}
+
+<a class="back" asp-action="ProductIndex">Back to products</a>
+<h1>Delete this product?</h1>
 
 <form asp-action="ProductDelete">
-    <input asp-for="Id" hidden>
-    <br>
-    <div class="container border p-3">
-        <h1 class="text-primary">Delete Product</h1>
-        <hr>
-        <div class="row">
+    <input asp-for="Id" type="hidden">
+    <div class="editor">
+        <div class="panel">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="col-2">
-                <label asp-for="Name" class="control-label pt-2" style="font-size: 20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="Name" disabled class="form-control">
-            </div>
-
-            <div class="col-2">
-                <label asp-for="CategoryName" class="control-label pt-2" style="font-size: 20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="CategoryName" disabled class="form-control">
-            </div>
-
-            <div class="col-2">
-                <label asp-for="Description" class="control-label pt-2" style="font-size: 20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <textarea asp-for="Description" disabled class="form-control" rows="5"></textarea>   
-            </div>
-
-            <div class="col-2">
-                <label asp-for="ImageURL" class="control-label pt-2" style="font-size: 20px;"></label>
-            </div>
-
-            <div class="col-10 pb-3">
-                <input asp-for="ImageURL" disabled class="form-control">
-            </div>
-
-            <div class="col-2">
-                <label asp-for="Price" class="control-label pt-2" style="font-size: 20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <input asp-for="Price" disabled class="form-control">
-            </div>
-
-            <div class="col-5 offset-2">
-                <a asp-action="ProductIndex" class="btn btn-primary form-control">Back to list</a>
-            </div>
-            
-            <div class="col-5">
-                <input type="submit" value="Delete" class="btn btn-danger form-control">
+            <div class="mini-line"><span>Name</span><strong>@Model.Name</strong></div>
+            <div class="mini-line"><span>Category</span><span>@Model.CategoryName</span></div>
+            <div class="mini-line"><span>Price</span><span>@Model.Price.ToString("c")</span></div>
+            <p class="warning">The product leaves the store right away. This cannot be undone.</p>
+            <div class="form-actions">
+                <button type="submit" class="btn danger">Delete product</button>
+                <a asp-action="ProductIndex" class="btn ghost">Keep it</a>
             </div>
         </div>
+        <article class="blister">
+            <div class="window"><img src="@(Model.ImageURL ?? "/images/product-placeholder.png")" alt="@Model.Name"></div>
+            <div class="cat">@Model.CategoryName</div>
+            <h2 class="name">@Model.Name</h2>
+            <p class="desc">@Model.Description</p>
+            <div class="card-foot"><span class="sticker">@Model.Price.ToString("c")</span></div>
+        </article>
     </div>
 </form>
-@* 
-@section Scripts
-{
-    <partial name="_ValidationScriptsPartial"/>
-} *@

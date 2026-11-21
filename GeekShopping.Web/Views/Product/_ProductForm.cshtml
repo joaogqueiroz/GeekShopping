@@ -1,0 +1,29 @@
+@model GeekShopping.Web.Models.ProductViewModel
+@* Fields shared by ProductCreate and ProductUpdate, with a preview of the store card. *@
+
+<div class="editor">
+    <div class="panel stack">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <label class="field">Name<input asp-for="Name" data-preview="name"><span asp-validation-for="Name" class="text-danger"></span></label>
+        <div class="grid2">
+            <label class="field">Price (R$)<input asp-for="Price" asp-format="{0:0.00}" inputmode="decimal" data-preview="price"><span asp-validation-for="Price" class="text-danger"></span></label>
+            <label class="field">Category<input asp-for="CategoryName" data-preview="cat"><span asp-validation-for="CategoryName" class="text-danger"></span></label>
+        </div>
+        <label class="field">Description <span class="hint">Up to 500 characters</span><textarea asp-for="Description" data-preview="desc"></textarea><span asp-validation-for="Description" class="text-danger"></span></label>
+        <label class="field">Image URL<input asp-for="ImageURL" data-preview="img"><span asp-validation-for="ImageURL" class="text-danger"></span></label>
+        <div class="form-actions">
+            <button type="submit" class="btn ink">@ViewData["SubmitText"]</button>
+            <a asp-action="ProductIndex" class="btn ghost">Cancel</a>
+        </div>
+    </div>
+    <div>
+        <div class="preview-label">How it shows in the store</div>
+        <article class="blister" data-preview-card>
+            <div class="window"><img data-show="img" src="@(Model?.ImageURL ?? "/images/product-placeholder.png")" alt=""></div>
+            <div class="cat" data-show="cat">@Model?.CategoryName</div>
+            <h2 class="name" data-show="name">@Model?.Name</h2>
+            <p class="desc" data-show="desc">@Model?.Description</p>
+            <div class="card-foot"><span class="sticker" data-show="price">@((Model?.Price ?? 0).ToString("c"))</span></div>
+        </article>
+    </div>
+</div>

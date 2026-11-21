@@ -1,36 +1,25 @@
 ﻿@model IEnumerable<GeekShopping.Web.Models.ProductViewModel>
+@{
+    ViewData["Title"] = "Products";
+}
 
-<form>
-    <div class="container row">
-        @foreach (var product in Model)
-        {
-            <div class="col-4">
-                <div class="p-0 my-3 border">
-                    <div class="card">
-                        @if(product.ImageURL != null){
-                        <img src="@product.ImageURL" class="card-img-top">
-                        }
-                        else
-                        {
-                            <img src="\images\product-placeholder.png" class="card-img-top">
-                        }
-                        <div class="card-body">
-                            <h3 class="card-title">@product.SubStringName()</h3>
-                            <span class="badge bg-light text-dark mb-2">@product.CategoryName</span>
-                            <p class="card-text">@product.SubStringDescription()</p>
-                            <div class="row">
-                                <div class="col pt-1">
-                                    <span style="font-size: 23px;">@string.Format("{0:c}", product.Price)</span>
-                                </div>
-                                <div class="col">
-                                    <a asp-action="Details" asp-route-id ="@product.Id" class="btn btn-success form-control">Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<h1>Collectibles, shirts and books for people who know the lore</h1>
+<p class="lede">Star Wars figures, SpaceX shirts, a Darth Vader helmet and a few things to read between launches.</p>
+
+<div class="shelf">
+    @foreach (var product in Model)
+    {
+        <article class="blister">
+            <div class="window">
+                <img src="@(product.ImageURL ?? "/images/product-placeholder.png")" alt="@product.Name" loading="lazy">
             </div>
-        }
-    </div>
-
-</form>
+            <div class="cat">@product.CategoryName</div>
+            <h2 class="name">@product.Name</h2>
+            <p class="desc">@product.Description</p>
+            <div class="card-foot">
+                <span class="sticker">@string.Format("{0:c}", product.Price)</span>
+                <a class="btn ghost" asp-action="Details" asp-route-id="@product.Id" aria-label="Details of @product.Name">Details</a>
+            </div>
+        </article>
+    }
+</div>

@@ -1,125 +1,66 @@
 @model GeekShopping.Web.Models.CartViewModel
+@{
+    ViewData["Title"] = "Your cart";
+}
 
-@if (Model.CartHeader != null && Model.CartDetails.Count() > 0)
+@if (Model.CartHeader != null && Model.CartDetails != null && Model.CartDetails.Any())
 {
-    <form method="post">
-        <br/>
-        <input asp-for="CartHeader.UserId" hidden />
-        <input asp-for="CartHeader.Id" hidden />
-        <div>
-            <div class="card border mt-4 container">
-                <div class="card-header bg-dark text-light ms-0 row">
-                    <div class="col-6">
-                        <i class="fa fa-shopping-cart"></i> &nbsp;
-                        Shopping Cart
-                    </div>
-                    <div class="col-6 text-end">
-                        <a asp-action="Index" asp-controller="Home" class="btn btn-outline-warning btn-sm">
-                            Continue Shopping
-                        </a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="d-none d-lg-block">
-                        <div class="row text-info">
-                            <div class="col-lg-2">
-                            </div>
-                            <div class="col-lg-5">
-                                Product Details
-                            </div>
-                            <div class="col-lg-2">
-                                Price
-                            </div>
-                            <div class="col-lg-2">
-                                Count
-                            </div>
-                            <div class="col-lg-1">
-                            </div>
-                        </div>
-                    </div>
+    var discount = Model.CartHeader.DiscountTotal ?? 0;
+    var total = Model.CartHeader.PurchaseAmount ?? 0;
+    var hasCoupon = !string.IsNullOrEmpty(Model.CartHeader.CouponCode);
 
-                    <hr/>
-                    
-                    @foreach (var item in Model.CartDetails)
-                    {
-                    <div class="row h-100">
-                        <div class="col-4 col-md-2 text-center py-2">
-                            <img src="@item.Product.ImageURL" class="rounded" width="100%"/>
-                        </div>
-                        <div class="col-8 col-md-5">
-                            <h5>@item.Product.Name</h5>
-                            <div style="font-size:11px;">
-                                @item.Product.Description
-                            </div>
-                        </div>
-                        <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
-                            <span style="font-size:17px;">
-                                @string.Format("{0:c}", item.Product.Price)
-                            </span>
-                        </div>
-                        <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
-                            <span style="font-size:17px;">
-                                @item.Count
-                            </span>
-                        </div>
-                        <div class="col-2 col-lg-1 p-0 pt-lg-4 text-center">
-                            <a asp-action="Remove" asp-route-id="@item.Id" class="btn btn-outline-danger">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </div>
+    <h1>Your cart</h1>
+    <form method="post">
+        <input asp-for="CartHeader.UserId" type="hidden" />
+        <input asp-for="CartHeader.Id" type="hidden" />
+        <div class="two-col">
+            <div class="lines">
+                @foreach (var item in Model.CartDetails)
+                {
+                    var count = item.Count ?? 0;
+                    <div class="line">
+                        <div class="thumb"><img src="@(item.Product.ImageURL ?? "/images/product-placeholder.png")" alt=""></div>
+                        <div><h3>@item.Product.Name</h3><small>@item.Product.CategoryName</small></div>
+                        <span class="unit">@count &times; @string.Format("{0:c}", item.Product.Price)</span>
+                        <strong>@string.Format("{0:c}", item.Product.Price * count)</strong>
+                        <a class="remove" asp-action="Remove" asp-route-id="@item.Id">Remove</a>
                     </div>
-                    <hr/>
-                    }                   
-                    <div class="row">
-                        <div class="col-6">
-                            @if(string.IsNullOrEmpty(Model.CartHeader.CouponCode))
-                            {
-                                <span>Coupon:</span>
-                                <input asp-for="CartHeader.CouponCode"/>
-                                <button type="submit" asp-action="ApplyCoupon" class="btn btn-success">
-                                    Apply
-                                </button>
-                            }
-                            else
-                            {
-                                <span>Coupon:</span>
-                                <input asp-for="CartHeader.CouponCode" disabled/>
-                                <button type="submit" asp-action="RemoveCoupon" class="btn btn-danger">
-                                    Remove
-                                </button>
-                            }
-                        </div>
-                        <div class="col-6 text-end">
-                            <span class="text-danger" style="font-size:21px;">
-                                Purchase Amount: @string.Format("{0:c}", Model.CartHeader.PurchaseAmount)
-                                <br/>
-                            </span>
-                            @if(Model.CartHeader.DiscountTotal > 0)
-                            {
-                                <span class="text-success">
-                                    Discount Amount: @string.Format("{0:c}", Model.CartHeader.DiscountTotal)
-                                    <br/>
-                                </span>
-                            }
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer row">
-                    <div class="col-6 col-md-3 offset-md-6">
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <a asp-action="Checkout" class="btn btn-success form-control">
-                            <span>Checkout</span>
-                        </a>
-                    </div>
-                </div>
+                }
             </div>
+            <aside class="summary">
+                <h2>Order summary</h2>
+                <div class="coupon">
+                    @if (hasCoupon)
+                    {
+                        <input asp-for="CartHeader.CouponCode" readonly aria-label="Coupon code" />
+                        <button type="submit" asp-action="RemoveCoupon" class="btn ghost">Remove</button>
+                    }
+                    else
+                    {
+                        <input asp-for="CartHeader.CouponCode" placeholder="Coupon code" aria-label="Coupon code" />
+                        <button type="submit" asp-action="ApplyCoupon" class="btn ghost">Apply</button>
+                    }
+                </div>
+                @if (discount > 0)
+                {
+                    <div class="applied">Coupon applied: @string.Format("{0:c}", discount) off</div>
+                }
+                <div class="sum" style="margin-top:12px"><span>Products</span><span>@string.Format("{0:c}", total + discount)</span></div>
+                @if (discount > 0)
+                {
+                    <div class="sum disc"><span>Coupon</span><span>&minus; @string.Format("{0:c}", discount)</span></div>
+                }
+                <div class="sum total"><span>Total</span><span>@string.Format("{0:c}", total)</span></div>
+                <a asp-action="Checkout" class="btn ink">Go to checkout</a>
+            </aside>
         </div>
     </form>
 }
 else
 {
-    <div>
-        <p>Yor Cart is Empty!</p>
+    <div class="empty">
+        <h1>Your cart is empty</h1>
+        <p>Pick a figure, a shirt or a book and it shows up here.</p>
+        <a class="btn ink" asp-controller="Home" asp-action="Index">See the products</a>
     </div>
 }
