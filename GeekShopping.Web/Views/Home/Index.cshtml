@@ -17,7 +17,7 @@
                         <div class="card-body">
                             <h3 class="card-title">@product.SubStringName()</h3>
                             <span class="badge bg-light text-dark mb-2">@product.CategoryName</span>
-                            <p class="card-text">@Html.Raw(product.SubStringDescription())</p>
+                            <p class="card-text">@product.SubStringDescription()</p>
                             <div class="row">
                                 <div class="col pt-1">
                                     <span style="font-size: 23px;">@string.Format("{0:c}", product.Price)</span>
