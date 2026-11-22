@@ -17,7 +17,7 @@ namespace GeekShopping.OrderAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "10.0.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -38,7 +38,7 @@ namespace GeekShopping.OrderAPI.Migrations
                     b.Property<long>("OrderHeaderId")
                         .HasColumnType("bigint");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("price");
 
@@ -107,7 +107,7 @@ namespace GeekShopping.OrderAPI.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("order_time");
 
-                    b.Property<int>("OrderTotal")
+                    b.Property<int?>("OrderTotal")
                         .HasColumnType("int")
                         .HasColumnName("order_total_itens");
 

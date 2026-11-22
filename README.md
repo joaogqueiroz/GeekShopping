@@ -121,11 +121,11 @@ sequenceDiagram
 
 ## Tech stack
 
-C# · .NET 8 · ASP.NET Core Web API and MVC · Razor · Ocelot · Duende IdentityServer · ASP.NET Identity · Entity Framework Core · SQL Server · RabbitMQ · AutoMapper · Swagger · Docker Compose
+C# · .NET 10 · ASP.NET Core Web API and MVC · Razor · Ocelot · Duende IdentityServer · ASP.NET Identity · Entity Framework Core · SQL Server · RabbitMQ · AutoMapper · Swagger · Docker Compose
 
 ## Running locally
 
-Requirements: .NET 8 SDK (`global.json` requires 8.0.100 or a later 8.0 SDK) and Docker.
+Requirements: .NET 10 SDK (`global.json` requires 10.0.100 or a later 10.0 SDK) and Docker.
 
 ```sh
 # SQL Server on 1433 and RabbitMQ on 5672 (management UI at http://localhost:15672)
