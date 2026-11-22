@@ -53,7 +53,7 @@ namespace GeekShopping.OrderAPI.MessageConsumer
             OrderHeader order = CheckoutOrderBuilder.BuildOrder(vo);
             await _repository.AddOrder(order);
 
-            PaymentVO payment = CheckoutOrderBuilder.BuildPayment(order);
+            PaymentVO payment = CheckoutOrderBuilder.BuildPayment(order, vo);
 
             try
             {

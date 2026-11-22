@@ -3,6 +3,8 @@ using GeekShopping.OrderAPI.Messages;
 using GeekShopping.OrderAPI.Model.Context;
 using GeekShopping.OrderAPI.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GeekShopping.Tests.OrderAPI
 {
@@ -48,6 +50,38 @@ namespace GeekShopping.Tests.OrderAPI
             Assert.Equal(130m, saved.PurchaseAmount);
             Assert.False(saved.PaymentStatus);
             Assert.Equal(new[] { "Mug", "T-shirt" }, saved.OrderDetails!.Select(d => d.ProductName).OrderBy(n => n));
+        }
+
+        [Fact]
+        public async Task AddOrder_StoresOnlyTheLastFourDigitsAndNoCvv()
+        {
+            var order = CheckoutOrderBuilder.BuildOrder(Checkout());
+            await _repository.AddOrder(order);
+
+            await using var db = new SqlServerContext(_options);
+            var saved = await db.Headers.SingleAsync(h => h.Id == order.Id);
+            Assert.Equal("**** **** **** 1111", saved.CardNumber);
+            Assert.Null(saved.CVV);
+        }
+
+        // Orders saved before the change held the whole card and the CVV
+        [Fact]
+        public async Task Migration_MasksTheCardsOfOrdersSavedBefore()
+        {
+            await using var db = new SqlServerContext(_options);
+            var migrator = db.GetService<IMigrator>();
+            await migrator.MigrateAsync("20230803010247_AddOrderDataTablesOnDB");
+            await db.Database.ExecuteSqlRawAsync(
+                "INSERT INTO order_header (card_number, cvv, expiry_month_year, payment_status, order_total_itens, purchase_amount, discount_total, purchase_date, order_time) " +
+                "VALUES ('4111111111111111', '123', '12/30', 0, 1, 10, 0, SYSDATETIME(), SYSDATETIME()), (NULL, NULL, NULL, 0, 1, 10, 0, SYSDATETIME(), SYSDATETIME())");
+
+            await migrator.MigrateAsync();
+
+            var rows = await db.Headers.AsNoTracking().OrderBy(h => h.Id).ToListAsync();
+            Assert.Equal("**** **** **** 1111", rows[0].CardNumber);
+            Assert.Null(rows[0].CVV);
+            Assert.Equal("12/30", rows[0].ExpiryMonthYear);
+            Assert.Null(rows[1].CardNumber);
         }
 
         [Fact]

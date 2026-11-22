@@ -20,8 +20,10 @@ namespace GeekShopping.OrderAPI.MessageConsumer
                 OrderTime = DateTime.Now,
                 Phone = vo.Phone,
                 Email = vo.Email,
-                CardNumber = vo.CardNumber,
-                CVV = vo.CVV,
+                // The saved order keeps only the last four digits. The full card travels in the payment
+                // message and the CVV is never stored.
+                CardNumber = MaskCardNumber(vo.CardNumber),
+                CVV = null,
                 ExpiryMonthYear = vo.ExpiryMonthYear,
                 PaymentStatus = false,
                 OrderDetails = new List<OrderDetail>(),
@@ -45,13 +47,21 @@ namespace GeekShopping.OrderAPI.MessageConsumer
             return order;
         }
 
-        // Built after the order is saved, so OrderId is the id the database assigned
-        public static PaymentVO BuildPayment(OrderHeader order) => new()
+        public static string? MaskCardNumber(string? cardNumber)
+        {
+            var digits = new string((cardNumber ?? "").Where(char.IsDigit).ToArray());
+            if (digits.Length == 0) return null;
+            return "**** **** **** " + digits[^Math.Min(4, digits.Length)..];
+        }
+
+        // Built after the order is saved, so OrderId is the id the database assigned. The card comes from
+        // the checkout message because the saved order no longer holds it.
+        public static PaymentVO BuildPayment(OrderHeader order, CheckoutHeaderVO checkout) => new()
         {
             Name = order.FirstName + " " + order.LastName,
-            CardNumber = order.CardNumber,
-            CVV = order.CVV,
-            ExpiryMonthYear = order.ExpiryMonthYear,
+            CardNumber = checkout.CardNumber,
+            CVV = checkout.CVV,
+            ExpiryMonthYear = checkout.ExpiryMonthYear,
             OrderId = order.Id,
             PurchaseAmount = order.PurchaseAmount,
             Email = order.Email,

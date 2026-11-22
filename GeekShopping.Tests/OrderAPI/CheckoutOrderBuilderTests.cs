@@ -75,8 +75,28 @@ namespace GeekShopping.Tests.OrderAPI
             Assert.Equal("GEEK10", order.CouponCode);
             Assert.Equal(120m, order.PurchaseAmount);
             Assert.Equal(10m, order.DiscountTotal);
-            Assert.Equal("4111111111111111", order.CardNumber);
             Assert.False(order.PaymentStatus);
+        }
+
+        [Fact]
+        public void Order_KeepsOnlyTheLastFourDigitsOfTheCardAndNoCvv()
+        {
+            var order = CheckoutOrderBuilder.BuildOrder(Checkout(Item(1, "T-shirt", 50m, 1)));
+
+            Assert.Equal("**** **** **** 1111", order.CardNumber);
+            Assert.Null(order.CVV);
+            Assert.Equal("12/30", order.ExpiryMonthYear);
+        }
+
+        [Theory]
+        [InlineData("4111 1111 1111 1111", "**** **** **** 1111")]
+        [InlineData("4111-1111-1111-1234", "**** **** **** 1234")]
+        [InlineData("12", "**** **** **** 12")]
+        [InlineData("", null)]
+        [InlineData(null, null)]
+        public void MaskCardNumber_ShowsOnlyTheLastFourDigits(string? card, string? expected)
+        {
+            Assert.Equal(expected, CheckoutOrderBuilder.MaskCardNumber(card));
         }
 
         [Fact]
@@ -94,12 +114,13 @@ namespace GeekShopping.Tests.OrderAPI
         }
 
         [Fact]
-        public void Payment_CarriesTheOrderIdNameCardAndAmount()
+        public void Payment_CarriesTheOrderIdNameFullCardAndAmount()
         {
-            var order = CheckoutOrderBuilder.BuildOrder(Checkout(Item(1, "T-shirt", 50m, 1)));
+            var checkout = Checkout(Item(1, "T-shirt", 50m, 1));
+            var order = CheckoutOrderBuilder.BuildOrder(checkout);
             order.Id = 42;   // assigned by the database when the order is saved
 
-            var payment = CheckoutOrderBuilder.BuildPayment(order);
+            var payment = CheckoutOrderBuilder.BuildPayment(order, checkout);
 
             Assert.Equal(42, payment.OrderId);
             Assert.Equal("Test User", payment.Name);
