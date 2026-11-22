@@ -475,3 +475,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# IdentityServer signing keys are generated on first run
+GeekShopping.IdentityServer/keys/
+GeekShopping.IdentityServer/tempkey.jwk
