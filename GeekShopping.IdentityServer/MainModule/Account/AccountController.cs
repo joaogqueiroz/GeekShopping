@@ -299,8 +299,8 @@ namespace IdentityServerHost.Quickstart.UI
                     await _userManager.AddClaimsAsync(user, new Claim[]{
                     new Claim(JwtClaimTypes.Name, model.Username),
                     new Claim(JwtClaimTypes.Email, model.Email),
-                    new Claim(JwtClaimTypes.FamilyName, model.FirstName),
-                    new Claim(JwtClaimTypes.GivenName, model.LastName),
+                    new Claim(JwtClaimTypes.FamilyName, model.LastName),
+                    new Claim(JwtClaimTypes.GivenName, model.FirstName),
                     new Claim(JwtClaimTypes.WebSite, $"http://{model.Username}.com"),
                     new Claim(JwtClaimTypes.Role,"User") });
 
